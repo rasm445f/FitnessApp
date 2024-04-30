@@ -12,16 +12,24 @@ export default function ExerciseListItem({ item }) {
   );
 }
 
-function capitalizeFirstLetter(string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
-}
-
 const styles = StyleSheet.create({
   exerciseContainer: {
     backgroundColor: "white",
     padding: 10,
     borderRadius: 10,
     gap: 5,
+    marginHorizontal: 2,
+
+    // Shadow
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+
+    elevation: 2,
   },
   exercisesName: {
     fontSize: 20,
