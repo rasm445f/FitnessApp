@@ -1,15 +1,49 @@
-import { StyleSheet, Text, View, ScrollView } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  ActivityIndicator,
+} from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import exercises from "../../assets/data/exercises.json";
 import { Stack } from "expo-router";
 import { useState } from "react";
+import { gql } from "graphql-request";
+import { useQuery } from "@tanstack/react-query";
+import graphqlClient from "../graphqlClient";
+import NewSetInput from "../components/NewSetInput";
+
+const exercisesQuery = gql`
+  query exercises($name: String) {
+    exercises(name: $name) {
+      name
+      muscle
+      equipment
+      instructions
+    }
+  }
+`;
 
 export default function ExerciseDefaultScreen() {
-  const params = useLocalSearchParams();
+  const { name } = useLocalSearchParams();
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["exercises", name],
+    queryFn: () => graphqlClient.request(exercisesQuery, { name }),
+  });
 
   const [isInstructionExpanded, setIsInstructionExpanded] = useState(false);
 
-  const exercise = exercises.find((item) => item.name === params.name);
+  if (isLoading) {
+    return <ActivityIndicator />;
+  }
+
+  if (error) {
+    console.log(error);
+    return <Text>Error: {error.message}</Text>;
+  }
+
+  const exercise = data?.exercises[0];
 
   if (!exercise) {
     return <Text>Exercise not found</Text>;
@@ -42,6 +76,8 @@ export default function ExerciseDefaultScreen() {
           {isInstructionExpanded ? "See less" : "See more"}
         </Text>
       </View>
+
+      <NewSetInput />
     </ScrollView>
   );
 }
