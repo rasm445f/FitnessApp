@@ -1,37 +1,66 @@
 import { View, Text, StyleSheet, TextInput, Button } from "react-native";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { gql } from "graphql-request";
+import { useMutation } from "@tanstack/react-query";
+import graphqlClient from "../graphqlClient"; // Ensure this is the correct path
 
-const NewSetInput = () => {
+const mutationDocument = gql`
+  mutation MyMutation($newSet: NewSet!) {
+    insertSet(
+      document: $newSet
+      collection: "sets"
+      database: "workouts"
+      dataSource: "TypeScript"
+    ) {
+      insertedId
+    }
+  }
+`;
+
+const NewSetInput = ({ exerciseName }) => {
   const [reps, setReps] = useState("");
   const [weight, setWeight] = useState("");
 
+  // const { username } = useAuth();
+  // const queryClient = useQueryClient();
+
+  const { mutate, error, isError, isPending } = useMutation({
+    mutationFn: (newSet) => graphqlClient.request(mutationDocument, { newSet }),
+  });
+
   const addSet = () => {
-    console.log("Add set", reps, weight);
-
-    //save data to the database
-
-    setReps("");
-    setWeight("");
+    const newSet = {
+      // username,
+      exercise: exerciseName,
+      reps: Number.parseInt(reps),
+    };
+    if (Number.parseFloat(weight)) {
+      newSet.weight = Number.parseFloat(weight);
+    }
+    mutate(newSet);
   };
 
   return (
     <View style={styles.container}>
-      <TextInput
-        value={reps}
-        onChangeText={setReps}
-        placeholder="Reps"
-        style={styles.input}
-        keyboardType="numeric"
-      />
-      <TextInput
-        value={weight}
-        onChangeText={setWeight}
-        placeholder="Weight"
-        style={styles.input}
-        keyboardType="numeric"
-      />
+      <View style={styles.row}>
+        <TextInput
+          value={reps}
+          onChangeText={setReps}
+          placeholder="Reps"
+          style={styles.input}
+          keyboardType="numeric"
+        />
+        <TextInput
+          value={weight}
+          onChangeText={setWeight}
+          placeholder="Weight"
+          style={styles.input}
+          keyboardType="numeric"
+        />
 
-      <Button title="Add" onPress={addSet} />
+        <Button title={isPending ? "Adding..." : "Add"} onPress={addSet} />
+      </View>
+      {isError && <Text style={{ color: "red" }}>Failed to add set</Text>}
     </View>
   );
 };
@@ -41,12 +70,15 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     padding: 10,
     borderRadius: 5,
-    flexDirection: "row",
+    gap: 5,
+  },
+  row: {
     gap: 10,
+    flexDirection: "row",
   },
   input: {
     borderWidth: 1,
-    borderBlockColor: "gainsboro",
+    borderColor: "gainsboro",
     padding: 10,
     flex: 1,
     borderRadius: 5,

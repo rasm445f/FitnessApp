@@ -13,6 +13,7 @@ import { gql } from "graphql-request";
 import { useQuery } from "@tanstack/react-query";
 import graphqlClient from "../graphqlClient";
 import NewSetInput from "../components/NewSetInput";
+import SetsList from "../components/SetsList";
 
 const exercisesQuery = gql`
   query exercises($name: String) {
@@ -49,6 +50,8 @@ export default function ExerciseDefaultScreen() {
     return <Text>Exercise not found</Text>;
   }
 
+  console.log("Passing exerciseName:", exercise.name);
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Stack.Screen options={{ title: exercise.name }} />
@@ -77,7 +80,8 @@ export default function ExerciseDefaultScreen() {
         </Text>
       </View>
 
-      <NewSetInput />
+      <NewSetInput exerciseName={exercise.name} />
+      <SetsList />
     </ScrollView>
   );
 }
