@@ -53,65 +53,72 @@ export default function ExerciseDefaultScreen() {
   console.log("Passing exerciseName:", exercise.name);
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <View style={styles.container}>
       <Stack.Screen options={{ title: exercise.name }} />
 
-      <View style={styles.panel}>
-        <Text style={styles.exercisesName}>{exercise.name}</Text>
+      <SetsList
+        exerciseName={exercise.name}
+        ListHeaderComponent={() => (
+          <View style={{ gap: 5 }}>
+            <View style={styles.panel}>
+              <Text style={styles.exerciseName}>{exercise.name}</Text>
 
-        <Text style={styles.exercisesSubtitle}>
-          <Text style={styles.subValue}>{exercise.muscle}</Text> |{" "}
-          <Text style={styles.subValue}>{exercise.equipment}</Text>
-        </Text>
-      </View>
+              <Text style={styles.exerciseSubtitle}>
+                <Text style={styles.subValue}>{exercise.muscle}</Text> |{" "}
+                <Text style={styles.subValue}>{exercise.equipment}</Text>
+              </Text>
+            </View>
 
-      <View style={styles.panel}>
-        <Text
-          style={styles.instruction}
-          numberOfLines={isInstructionExpanded ? 0 : 3}
-        >
-          {exercise.instructions}
-        </Text>
-        <Text
-          onPress={() => setIsInstructionExpanded(!isInstructionExpanded)}
-          style={styles.seeMore}
-        >
-          {isInstructionExpanded ? "See less" : "See more"}
-        </Text>
-      </View>
+            <View style={styles.panel}>
+              <Text
+                style={styles.instructions}
+                numberOfLines={isInstructionExpanded ? 0 : 3}
+              >
+                {exercise.instructions}
+              </Text>
+              <Text
+                onPress={() => setIsInstructionExpanded(!isInstructionExpanded)}
+                style={styles.seeMore}
+              >
+                {isInstructionExpanded ? "See less" : "See more"}
+              </Text>
+            </View>
 
-      <NewSetInput exerciseName={exercise.name} />
-      <SetsList />
-    </ScrollView>
+            <NewSetInput exerciseName={exercise.name} />
+          </View>
+        )}
+      />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     padding: 10,
-    gap: 10,
   },
-  exercisesName: {
+  panel: {
+    backgroundColor: "white",
+    padding: 10,
+    borderRadius: 5,
+  },
+  exerciseName: {
     fontSize: 20,
     fontWeight: "500",
   },
-  exercisesSubtitle: {
+  exerciseSubtitle: {
     color: "dimgray",
   },
   subValue: {
     textTransform: "capitalize",
   },
-  instruction: {
-    marginTop: 10,
-    borderRadius: 5,
-  },
-  panel: {
-    padding: 10,
-    backgroundColor: "white",
+  instructions: {
+    fontSize: 16,
+    lineHeight: 22,
   },
   seeMore: {
     alignSelf: "center",
-    padding: 10,
+    padding: 5,
     fontWeight: "600",
+    color: "gray",
   },
 });
