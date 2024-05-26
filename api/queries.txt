@@ -1,0 +1,31 @@
+curl -s "https://eu-central-1.aws.data.mongodb-api.com/app/data-mwtusto/endpoint/data/v1/action/insertOne" \
+-X POST \
+-H "apikey: t1Uu6Ca1IhamulPZZilqNaXcCg0bAPhPEws7EXQj80z7xgzqgVES50Wfz9aVKDrp" \
+-H "Content-Type: applilaction/ejson" \
+-H "Accept: applilaction/ejson" \
+-d '{
+    "dataSource": "TypeScript",
+    "database": "workouts",
+    "collection": "sets",
+    "document": {
+        "exercise": "push",
+        "weight": 4,
+        "reps": 1
+    }     
+}'
+
+curl -s "https://eu-central-1.aws.data.mongodb-api.com/app/data-mwtusto/endpoint/data/v1/action/insertOne" \
+-X POST \
+-H "Api-Key: t1Uu6Ca1IhamulPZZilqNaXcCg0bAPhPEws7EXQj80z7xgzqgVES50Wfz9aVKDrp" \
+-H "Content-Type: application/json" \
+-H "Accept: application/json" \
+-d '{
+    "dataSource": "TypeScript",
+    "database": "workouts",
+    "collection": "sets",
+    "document": {
+        "exercise": "are you working?",
+        "weight": 6,
+        "reps": 11
+    }     
+}'

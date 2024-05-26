@@ -3,6 +3,7 @@ import { View, Text, ActivityIndicator, FlatList } from "react-native";
 import { gql } from "graphql-request";
 import { useQuery } from "@tanstack/react-query";
 import graphqlClient from "../graphqlClient";
+import { useAuth } from "../auth/AuthContext";
 
 const setsQuerey = gql`
   query sets($exercise: String!) {

@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text, Button } from "react-native";
 import { useNavigation } from "expo-router";
 
-export default function DetailsScreen() {
+export default function ProgressScreen() {
   const navigation = useNavigation();
 
   return (
