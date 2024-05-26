@@ -10,7 +10,7 @@ type Root {
 }
 
 type Query {
-  sets: Root
+  sets(exercise: String!): Root
     @rest(
       method: POST
       endpoint: "https://eu-central-1.aws.data.mongodb-api.com/app/data-mwtusto/endpoint/data/v1/action/find"
@@ -24,8 +24,11 @@ type Query {
       postbody: """
       {
         "collection": "sets",
+        "dataSource": "TypeScript",
         "database": "workouts",
-        "dataSource": "TypeScript"
+        "filter": {
+          "exercise": "{{ .Get "exercise" }}"
+        }
       }
       """
     )
