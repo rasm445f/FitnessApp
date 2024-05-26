@@ -6,8 +6,8 @@ import graphqlClient from "../graphqlClient";
 import { useAuth } from "../auth/AuthContext";
 
 const setsQuerey = gql`
-  query sets($exercise: String!) {
-    sets(exercise: $exercise) {
+  query sets($exercise: String!, $username: String!) {
+    sets(exercise: $exercise, username: $username) {
       documents {
         _id
         exercise
@@ -19,10 +19,11 @@ const setsQuerey = gql`
 `;
 
 const SetsList = ({ ListHeaderComponent, exerciseName }) => {
+  const { username } = useAuth();
   const { data, isLoading } = useQuery({
     queryKey: ["sets", exerciseName],
     queryFn: () =>
-      graphqlClient.request(setsQuerey, { exercise: exerciseName }),
+      graphqlClient.request(setsQuerey, { exercise: exerciseName, username }),
   });
 
   if (isLoading) {
