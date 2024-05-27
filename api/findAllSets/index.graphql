@@ -1,0 +1,62 @@
+type Set {
+  _id: String
+  exercise: String
+  reps: Int
+  username: String
+  weight: Float
+}
+
+type ExerciseSets {
+  exercise: String
+  sets: [Set]
+}
+
+type Query {
+  userExerciseSets(username: String!): [ExerciseSets]
+    @rest(
+      method: POST
+      endpoint: "https://eu-central-1.aws.data.mongodb-api.com/app/data-mwtusto/endpoint/data/v1/action/aggregate"
+      headers: [
+        { name: "Content-Type", value: "application/json" }
+        {
+          name: "api-key"
+          value: "t1Uu6Ca1IhamulPZZilqNaXcCg0bAPhPEws7EXQj80z7xgzqgVES50Wfz9aVKDrp"
+        }
+      ]
+      postbody: """
+      {
+        "collection": "sets",
+        "dataSource": "TypeScript",
+        "database": "workouts",
+        "pipeline": [
+          {
+            "$match": {
+              "username": "{{username}}"
+            }
+          },
+          {
+            "$group": {
+              "_id": "$exercise",
+              "sets": {
+                "$push": {
+                  "_id": "$_id",
+                  "exercise": "$exercise",
+                  "reps": "$reps",
+                  "username": "$username",
+                  "weight": "$weight"
+                }
+              }
+            }
+          },
+          {
+            "$project": {
+              "exercise": "$_id",
+              "sets": 1,
+              "_id": 0
+            }
+          }
+        ]
+      }
+      """
+    )
+}

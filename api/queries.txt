@@ -29,3 +29,15 @@ curl -s "https://eu-central-1.aws.data.mongodb-api.com/app/data-mwtusto/endpoint
         "reps": 11
     }     
 }'
+
+curl -s POST https://eu-central-1.aws.data.mongodb-api.com/app/data-mwtusto/endpoint/data/v1/action/find \
+-H "Content-Type: application/json" \
+-H "api-key: t1Uu6Ca1IhamulPZZilqNaXcCg0bAPhPEws7EXQj80z7xgzqgVES50Wfz9aVKDrp" \
+-d '{
+  "collection": "sets",
+  "dataSource": "TypeScript",
+  "database": "workouts",
+  "filter": {
+    "username": "test@mail.com"
+  }
+}'

@@ -1,16 +1,16 @@
-type DocumentsEntry {
+type DocumentsEntrySets {
   _id: String
   exercise: String
   reps: Int
   weight: Float
 }
 
-type Root {
-  documents: [DocumentsEntry]
+type RootSets {
+  documents: [DocumentsEntrySets]
 }
 
 type Query {
-  sets(exercise: String!, username: String!): Root
+  sets(exercise: String!, username: String!): RootSets
     @rest(
       method: POST
       endpoint: "https://eu-central-1.aws.data.mongodb-api.com/app/data-mwtusto/endpoint/data/v1/action/find"

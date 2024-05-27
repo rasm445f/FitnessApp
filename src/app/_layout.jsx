@@ -32,6 +32,7 @@ function MainContent() {
   return username ? (
     <Tabs>
       <Tabs.Screen name="discover" options={{ title: "Discover" }} />
+      <Tabs.Screen name="index" options={{ title: "Workout" }} />
       <Tabs.Screen name="exercise" options={{ title: "Exercise" }} />
       <Tabs.Screen name="progress" options={{ title: "Progress" }} />
       <Tabs.Screen
