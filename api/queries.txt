@@ -30,7 +30,7 @@ curl -s "https://eu-central-1.aws.data.mongodb-api.com/app/data-mwtusto/endpoint
     }     
 }'
 
-curl -s POST https://eu-central-1.aws.data.mongodb-api.com/app/data-mwtusto/endpoint/data/v1/action/find \
+curl POST https://eu-central-1.aws.data.mongodb-api.com/app/data-mwtusto/endpoint/data/v1/action/find \
 -H "Content-Type: application/json" \
 -H "api-key: t1Uu6Ca1IhamulPZZilqNaXcCg0bAPhPEws7EXQj80z7xgzqgVES50Wfz9aVKDrp" \
 -d '{
@@ -41,3 +41,127 @@ curl -s POST https://eu-central-1.aws.data.mongodb-api.com/app/data-mwtusto/endp
     "username": "test@mail.com"
   }
 }'
+
+
+curl -s "https://eu-central-1.aws.data.mongodb-api.com/app/data-mwtusto/endpoint/data/v1/action/insertOne" \
+-X POST \
+-H "Api-Key: t1Uu6Ca1IhamulPZZilqNaXcCg0bAPhPEws7EXQj80z7xgzqgVES50Wfz9aVKDrp" \
+-H "Content-Type: application/json" \
+-H "Accept: application/json" \
+-d '{
+    "dataSource": "TypeScript",
+    "database": "workouts",
+    "collection": "workoutPlans",
+    "document": {
+        "userName": "exampleUser",
+        "name": "Full Body Workout",
+        "description": "A comprehensive full body workout plan.",
+        "createdAt": "2024-05-27T12:00:00Z",
+        "updatedAt": "2024-05-27T12:00:00Z",
+        "workouts": [
+            {
+                "day": "Monday",
+                "exercises": [
+                    {
+                        "name": "Push-ups",
+                        "reps": 15,
+                        "sets": 3,
+                        "rest": "60s"
+                    },
+                    {
+                        "name": "Squats",
+                        "reps": 20,
+                        "sets": 3,
+                        "rest": "60s"
+                    }
+                ]
+            },
+            {
+                "day": "Wednesday",
+                "exercises": [
+                    {
+                        "name": "Pull-ups",
+                        "reps": 10,
+                        "sets": 3,
+                        "rest": "90s"
+                    },
+                    {
+                        "name": "Lunges",
+                        "reps": 15,
+                        "sets": 3,
+                        "rest": "60s"
+                    }
+                ]
+            }
+        ]
+    }
+}'
+
+
+curl -s "https://eu-central-1.aws.data.mongodb-api.com/app/data-mwtusto/endpoint/data/v1/action/findOne" \
+-X POST \
+-H "Api-Key: t1Uu6Ca1IhamulPZZilqNaXcCg0bAPhPEws7EXQj80z7xgzqgVES50Wfz9aVKDrp" \
+-H "Content-Type: application/json" \
+-H "Accept: application/json" \
+-d '{
+    "dataSource": "TypeScript",
+    "database": "workouts",
+    "collection": "workoutPlans",
+    "filter": { "userName": "test@mail.com" }
+}'
+
+
+addWorkout in graphql playground:
+
+mutation MyMutation {
+  addWorkoutPlan(
+    collection: "workoutPlans"
+    database: "workouts"
+    dataSource: "TypeScript"
+    document: {
+      userName: "test@mail.com",
+      name: "Full Body Workout",
+      description: "A comprehensive full body workout plan.",
+      createdAt: "2024-05-27T12:00:00Z",
+      updatedAt: "2024-05-27T12:00:00Z",
+      workouts: [
+        {
+          day: "Monday",
+          exercises: [
+            {
+              name: "Push-ups",
+              reps: 15,
+              sets: 3,
+              rest: "60s"
+            },
+            {
+              name: "Squats",
+              reps: 20,
+              sets: 3,
+              rest: "60s"
+            }
+          ]
+        },
+        {
+          day: "Wednesday",
+          exercises: [
+            {
+              name: "Pull-ups",
+              reps: 10,
+              sets: 3,
+              rest: "90s"
+            },
+            {
+              name: "Lunges",
+              reps: 15,
+              sets: 3,
+              rest: "60s"
+            }
+          ]
+        }
+      ]
+    }
+  ) {
+    insertedId
+  }
+}

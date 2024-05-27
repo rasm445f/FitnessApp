@@ -5,6 +5,8 @@ schema
       "mongodb/index.graphql"
       "curl-01/index.graphql"
       "findAllSets/index.graphql"
+      "workouts/index.graphql"
+      "curl/index.graphql"
     ]
   ) {
   query: Query

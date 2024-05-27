@@ -1,0 +1,25 @@
+scalar InputDocument
+
+type Root {
+  insertedId: String
+}
+
+type Mutation {
+  addWorkoutPlan(
+    collection: String
+    dataSource: String
+    database: String
+    document: InputDocument
+  ): Root
+    @rest(
+      method: POST
+      endpoint: "https://eu-central-1.aws.data.mongodb-api.com/app/data-mwtusto/endpoint/data/v1/action/insertOne"
+      headers: [
+        { name: "accept", value: "application/json" }
+        {
+          name: "api-key"
+          value: "t1Uu6Ca1IhamulPZZilqNaXcCg0bAPhPEws7EXQj80z7xgzqgVES50Wfz9aVKDrp"
+        }
+      ]
+    )
+}
