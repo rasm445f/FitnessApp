@@ -10,6 +10,7 @@ import exercise from "./exercise";
 import progress from "./progress";
 import { useNavigation } from "expo-router";
 import ExerciseDefaultScreen from "./[name]";
+import DiscoverStack from "./navigation/DiscoverStack";
 
 const queryClient = new QueryClient();
 const Tab = createBottomTabNavigator();
@@ -40,7 +41,7 @@ function MainContent() {
     <Tab.Navigator>
       <Tab.Screen
         name="discover"
-        component={discover}
+        component={DiscoverStack}
         options={{ title: "Discover" }}
       />
       <Tab.Screen

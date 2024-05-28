@@ -1,72 +1,83 @@
-import React from "react";
-import { View, Text, Button, FlatList, StyleSheet } from "react-native";
-import { useNavigation } from "expo-router";
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  FlatList,
+  ActivityIndicator,
+  StyleSheet,
+} from "react-native";
+import { gql } from "graphql-request";
+import { useQuery } from "@tanstack/react-query";
+import client from "../graphqlClient";
+import WorkoutListItem from "./workoutPlans/WorkoutListItem";
+import DiscoverListItem from "./DiscoverListItem";
 
-const workoutSets = [
-  { id: "1", name: "Push-ups", reps: 15 },
-  { id: "2", name: "Squats", reps: 20 },
-  { id: "3", name: "Lunges", reps: 15 },
-  { id: "4", name: "Plank", duration: "1 min" },
-];
+const allWorkoutPlansQuery = gql`
+  query {
+    allWorkoutPlans {
+      documents {
+        _id
+        username
+        name
+        description
+        createdAt
+        updatedAt
+        workouts {
+          day
+          exercises {
+            name
+            reps
+            sets
+            rest
+          }
+        }
+      }
+    }
+  }
+`;
 
-const WorkoutSet = ({ name, reps, duration }) => (
-  <View style={styles.workoutSet}>
-    <Text style={styles.workoutName}>{name}</Text>
-    {reps && <Text style={styles.workoutDetail}>Reps: {reps}</Text>}
-    {duration && <Text style={styles.workoutDetail}>Duration: {duration}</Text>}
-  </View>
-);
+const fetchAllWorkoutPlans = async () => {
+  const data = await client.request(allWorkoutPlansQuery);
+  return data.allWorkoutPlans.documents;
+};
 
-export default function DiscoverScreen() {
-  const navigation = useNavigation();
+const DiscoverScreen = () => {
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["allWorkoutPlans"],
+    queryFn: fetchAllWorkoutPlans,
+  });
+
+  if (isLoading) {
+    return <ActivityIndicator />;
+  }
+
+  if (error) {
+    console.error("Error fetching workout plans:", error);
+    return <Text>Failed to fetch workout plans</Text>;
+  }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Discover Workouts</Text>
       <FlatList
-        data={workoutSets}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <WorkoutSet
-            name={item.name}
-            reps={item.reps}
-            duration={item.duration}
-          />
-        )}
-      />
-      <Button
-        title="Go to Exercise"
-        onPress={() => navigation.navigate("exercise")}
+        data={data}
+        keyExtractor={(item) => item._id}
+        renderItem={({ item }) => <DiscoverListItem item={item} />}
+        contentContainerStyle={styles.list}
       />
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
     justifyContent: "center",
-    padding: 16,
-  },
-  title: {
-    fontSize: 24,
-    marginBottom: 16,
-  },
-  workoutSet: {
-    padding: 16,
-    marginVertical: 8,
-    backgroundColor: "#f8f8f8",
-    borderRadius: 8,
-    width: "100%",
     alignItems: "center",
   },
-  workoutName: {
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  workoutDetail: {
-    fontSize: 16,
-    color: "#555",
+  list: {
+    width: "100%",
+    padding: 10,
   },
 });
+
+export default DiscoverScreen;
