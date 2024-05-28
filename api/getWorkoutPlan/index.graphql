@@ -1,0 +1,50 @@
+type WorkoutExercise {
+  name: String
+  reps: Int
+  sets: Int
+  rest: String
+}
+
+type WorkoutDay {
+  day: String
+  exercises: [WorkoutExercise]
+}
+
+type DocumentsEntryWorkoutPlans {
+  _id: String
+  username: String
+  name: String
+  description: String
+  createdAt: String
+  updatedAt: String
+  workouts: [WorkoutDay]
+}
+
+type RootWorkoutPlans {
+  documents: [DocumentsEntryWorkoutPlans]
+}
+
+type Query {
+  workoutPlans(username: String!): RootWorkoutPlans
+    @rest(
+      method: POST
+      endpoint: "https://eu-central-1.aws.data.mongodb-api.com/app/data-mwtusto/endpoint/data/v1/action/find"
+      headers: [
+        { name: "Content-Type", value: "application/json" }
+        {
+          name: "api-key"
+          value: "t1Uu6Ca1IhamulPZZilqNaXcCg0bAPhPEws7EXQj80z7xgzqgVES50Wfz9aVKDrp"
+        }
+      ]
+      postbody: """
+      {
+        "collection": "workoutPlans",
+        "dataSource": "TypeScript",
+        "database": "workouts",
+        "filter": {
+          "username": "{{ .Get "username" }}"
+        }
+      }
+      """
+    )
+}
