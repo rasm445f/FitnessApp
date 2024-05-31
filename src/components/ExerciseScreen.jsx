@@ -12,7 +12,7 @@ import { gql } from "graphql-request";
 import client from "../graphqlClient";
 import { Redirect } from "expo-router";
 import { useAuth } from "../auth/AuthContext";
-import ExerciseListItem from "../utils/ExerciseListItem";
+import ExerciseListItem from "./ExerciseListItem";
 import { useState } from "react";
 import { useDebounce } from "@uidotdev/usehooks";
 

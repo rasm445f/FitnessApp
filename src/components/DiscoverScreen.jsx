@@ -9,7 +9,6 @@ import {
 import { gql } from "graphql-request";
 import { useQuery } from "@tanstack/react-query";
 import client from "../graphqlClient";
-import WorkoutListItem from "./workoutPlans/WorkoutListItem";
 import DiscoverListItem from "./DiscoverListItem";
 
 const allWorkoutPlansQuery = gql`

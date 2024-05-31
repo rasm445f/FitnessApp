@@ -57,16 +57,12 @@ function MainContent() {
       <Tab.Screen
         name="progress"
         component={progress}
-        options={{
-          title: "Progress",
-          tabBarButton: () => null,
-          tabBarVisible: false,
-        }}
+        options={{ title: "Progress" }}
       />
       <Tab.Screen
         name="[name]"
         component={ExerciseDefaultScreen}
-        options={{ tabBarButton: () => null, tabBarVisible: false }}
+        options={{ tabBarButton: () => null }}
       />
     </Tab.Navigator>
   ) : (

@@ -11,8 +11,8 @@ import { useState } from "react";
 import { gql } from "graphql-request";
 import { useQuery } from "@tanstack/react-query";
 import graphqlClient from "../graphqlClient";
-import NewSetInput from "../utils/NewSetInput";
-import SetsList from "../utils/SetsList";
+import NewSetInput from "../components/NewSetInput";
+import SetsList from "../components/SetsList";
 
 const exercisesQuery = gql`
   query exercises($name: String) {
@@ -48,8 +48,6 @@ export default function ExerciseDefaultScreen() {
   if (!exercise) {
     return <Text>Exercise not found</Text>;
   }
-
-  console.log("Passing exerciseName:", exercise.name);
 
   return (
     <View style={styles.container}>

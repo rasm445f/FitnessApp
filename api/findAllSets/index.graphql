@@ -6,16 +6,11 @@ type Set {
   weight: Float
 }
 
-type ExerciseSets {
-  exercise: String
-  sets: [Set]
-}
-
 type Query {
-  userExerciseSets(username: String!): [ExerciseSets]
+  userExerciseSets(username: String!): [Set]
     @rest(
       method: POST
-      endpoint: "https://eu-central-1.aws.data.mongodb-api.com/app/data-mwtusto/endpoint/data/v1/action/aggregate"
+      endpoint: "https://eu-central-1.aws.data.mongodb-api.com/app/data-mwtusto/endpoint/data/v1/action/find"
       headers: [
         { name: "Content-Type", value: "application/json" }
         {
@@ -28,34 +23,9 @@ type Query {
         "collection": "sets",
         "dataSource": "TypeScript",
         "database": "workouts",
-        "pipeline": [
-          {
-            "$match": {
-              "username": "{{username}}"
-            }
-          },
-          {
-            "$group": {
-              "_id": "$exercise",
-              "sets": {
-                "$push": {
-                  "_id": "$_id",
-                  "exercise": "$exercise",
-                  "reps": "$reps",
-                  "username": "$username",
-                  "weight": "$weight"
-                }
-              }
-            }
-          },
-          {
-            "$project": {
-              "exercise": "$_id",
-              "sets": 1,
-              "_id": 0
-            }
-          }
-        ]
+        "filter": {
+          "username": "{{ .Get "username" }}"
+        }
       }
       """
     )

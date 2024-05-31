@@ -4,8 +4,9 @@ import { gql } from "graphql-request";
 import { useQuery } from "@tanstack/react-query";
 import graphqlClient from "../graphqlClient";
 import { useAuth } from "../auth/AuthContext";
+import { formatDistanceToNow } from "date-fns";
 
-const setsQuerey = gql`
+const setsQuery = gql`
   query sets($exercise: String!, $username: String!) {
     sets(exercise: $exercise, username: $username) {
       documents {
@@ -20,35 +21,46 @@ const setsQuerey = gql`
 
 const SetsList = ({ ListHeaderComponent, exerciseName }) => {
   const { username } = useAuth();
+
   const { data, isLoading } = useQuery({
-    queryKey: ["sets", exerciseName],
+    queryKey: ["sets", exerciseName, username],
     queryFn: () =>
-      graphqlClient.request(setsQuerey, { exercise: exerciseName, username }),
+      graphqlClient.request(setsQuery, { exercise: exerciseName, username }),
   });
 
   if (isLoading) {
     return <ActivityIndicator />;
   }
 
-  console.log(data);
+  const renderItem = ({ item }) => {
+    const timestamp = parseInt(item._id.substring(0, 8), 16) * 1000;
+    const createdAt = new Date(timestamp);
+
+    return (
+      <View
+        style={{
+          backgroundColor: "white",
+          marginVertical: 5,
+          padding: 10,
+          borderRadius: 5,
+        }}
+      >
+        <Text>
+          {item.reps} x {item.weight}
+        </Text>
+        <Text style={{ color: "gray" }}>
+          {formatDistanceToNow(createdAt)} ago
+        </Text>
+      </View>
+    );
+  };
 
   return (
     <FlatList
       data={data.sets.documents}
       ListHeaderComponent={ListHeaderComponent}
-      renderItem={({ item }) => (
-        <Text
-          style={{
-            backgroundColor: "white",
-            marginVertical: 5,
-            padding: 10,
-            borderRadius: 5,
-            overflow: "hidden",
-          }}
-        >
-          {item.reps} x {item.weight}{" "}
-        </Text>
-      )}
+      renderItem={renderItem}
+      keyExtractor={(item) => item._id}
     />
   );
 };

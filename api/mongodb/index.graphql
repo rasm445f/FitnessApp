@@ -33,4 +33,27 @@ type Query {
       }
       """
     )
+
+  setsByUsername(username: String!): RootSets
+    @rest(
+      method: POST
+      endpoint: "https://eu-central-1.aws.data.mongodb-api.com/app/data-mwtusto/endpoint/data/v1/action/find"
+      headers: [
+        { name: "Content-Type", value: "application/json" }
+        {
+          name: "api-key"
+          value: "t1Uu6Ca1IhamulPZZilqNaXcCg0bAPhPEws7EXQj80z7xgzqgVES50Wfz9aVKDrp"
+        }
+      ]
+      postbody: """
+      {
+        "collection": "sets",
+        "dataSource": "TypeScript",
+        "database": "workouts",
+        "filter": {
+          "username": "{{ .Get "username" }}"
+        }
+      }
+      """
+    )
 }
